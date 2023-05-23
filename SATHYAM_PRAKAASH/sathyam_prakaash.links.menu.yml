@@ -1,0 +1,5 @@
+menu.controller_page:
+  title: 'Controller Page' #name for the menu
+  description: 'Controller Page' #desc for the menu
+  route_name: 'sathyam_prakaash.controller' #this menu directs us to controller page
+  menu_name: system.admin #it comes under the admin menu which is the parent menu

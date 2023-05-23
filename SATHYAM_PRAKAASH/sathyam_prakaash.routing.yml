@@ -1,0 +1,25 @@
+sathyam_prakaash.controller: #machine name
+  path: '/controller-page' #giving path to SPController.php
+  defaults:
+    _controller: '\Drupal\sathyam_prakaash\Controller\SPController::banner'
+    _title: 'Controller Page'  #title given for SPController.php
+  requirements:
+    _permission: 'access content'  #permission created for controller
+
+sathyam_prakaash.modified_form: #machine name
+  path: "/modified-form-page"  #giving path to ModifiedForm.php
+  defaults:
+    _form: '\Drupal\sathyam_prakaash\Form\ModifiedForm' #defining the path
+    _title: 'Modified Form' #title given for custom form
+  requirements:
+    _permission: 'access content' #permission to access published content
+
+sathyam_prakaash.config_form: #machine name
+  path: '/config-form-page'  #giving path to Configform.php
+  defaults:
+    _form: '\Drupal\sathyam_prakaash\Form\ConfigForm' #defining the path
+    _title: 'Config Form'  #title given for config form
+  requirements:
+    _permission: 'administer site configuration' #created new pemission with admin route enabled
+  options:
+    _admin_route: TRUE

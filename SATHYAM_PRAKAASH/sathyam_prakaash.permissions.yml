@@ -1,0 +1,3 @@
+administer site configuration: #created permission for config form
+  title: Config Page Permission #title of the permission
+  description: It is a config page #descripton for the permission

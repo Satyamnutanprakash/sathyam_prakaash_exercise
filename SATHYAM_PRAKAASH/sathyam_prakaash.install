@@ -1,0 +1,38 @@
+<?php
+// update => module reinstallation not required.
+/**
+ * implements hook_schema().
+ */
+
+function sathyam_prakaash_schema() {
+    $schema['form_details'] = [
+        'description' => 'Stores user details',
+        'fields' => [
+            'id' => [
+                'description' => 'serial number',
+                'type' => 'serial',
+                'not null' => true
+            ],
+            'firstname' => [
+                'description' => 'Firstname of the user',
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+            'lastname' => [
+                'description' => 'Last Name of the user',
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+            'gender' => [
+                'description' => 'Gender of the user',
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+        ],
+        'primary key' => ['id'],
+    ];
+    return $schema;
+}

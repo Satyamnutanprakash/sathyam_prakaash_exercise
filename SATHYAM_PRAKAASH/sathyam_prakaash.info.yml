@@ -1,0 +1,5 @@
+name: 'SATHYAM PRAKAASH MODULE'  # name of the custom module I created
+description: 'Sathyam Prakaash Module'  #desc for the module
+type: module  #type of the custom I created(profile or modules etc)
+core_version_requirement: ^9 || ^10 #version this module will be compatible with
+version: 9.x-1.0

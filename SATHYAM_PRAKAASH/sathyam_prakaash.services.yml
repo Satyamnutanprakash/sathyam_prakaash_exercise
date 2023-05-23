@@ -1,0 +1,9 @@
+services: #creating a service
+  sathyam_prakaash.config_service:
+    class: Drupal\sathyam_prakaash\ConfigService
+    arguments: ['@config.factory']
+
+  redirect_events_subscriber: #intialiing the eventsubscriber
+    class: '\Drupal\sathyam_prakaash\EventSubscriber\RedirectEventSubscriber'
+    tags:
+      - { name: 'event_subscriber' }

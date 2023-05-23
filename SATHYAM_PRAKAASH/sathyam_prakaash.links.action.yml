@@ -1,0 +1,5 @@
+sathyam.view_config_form:
+  route_name: sathyam_prakaash.config_form #directs us to the config form page
+  title: 'Config Form Page'  #title of the button
+  appears_on:
+    -  "sathyam_prakaash.modified_form" #this button is appears on the custom form page

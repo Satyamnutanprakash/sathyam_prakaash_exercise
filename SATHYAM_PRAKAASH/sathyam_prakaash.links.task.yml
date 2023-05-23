@@ -1,0 +1,18 @@
+sathyam_prakaash.config_form_page: # The first plugin ID
+  route_name: sathyam_prakaash.config_form #directs us to config form page
+  title: 'Config Form Page' #menu tab name for config form page
+  weight: 7 #this has to be displyed second
+  base_route: sathyam_prakaash.controller #appears on controller page
+
+sathyam_prakaash.controller_page:
+  route_name: sathyam_prakaash.controller #directs us to controller page
+  title: 'Controller Page'  #menu tab name for controller
+  weight: 10 #this has to be displayed third
+  base_route: sathyam_prakaash.controller #appears on controller page
+
+sathyam_prakaash.modified_form_page:
+  route_name: sathyam_prakaash.modified_form #directs us to custom form page
+  title: 'Modified Form Page'  #menu tab name for custom form page
+  weight: 0 #this has to displayed first (1st menu tab)
+  base_route: sathyam_prakaash.controller #appears on controller page
+
