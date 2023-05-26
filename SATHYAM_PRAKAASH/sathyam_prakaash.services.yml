@@ -6,4 +6,9 @@ services: #creating a service
   redirect_events_subscriber: #intialiing the eventsubscriber
     class: '\Drupal\sathyam_prakaash\EventSubscriber\RedirectEventSubscriber'
     tags:
-      - { name: 'event_subscriber' }
+      - { name: 'event_subscriber' } # to use event subscriber
+
+   sathyam_prakaash_user_login: #creating a eventsubscriber
+    class: '\Drupal\sathyam_prakaash\EventSubscriber\UserLoginDemo'
+    tags:
+      - { name: 'event_subscriber' } # to use event subscriber

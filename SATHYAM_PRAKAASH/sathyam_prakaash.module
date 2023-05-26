@@ -1,18 +1,16 @@
-<?php
-
 use Drupal\Core\Form\FormStateInterface;
-
+use Drupal\sathyam_prakaash\Event\UserLoginEvent;
 /**
  * implements hook_form_alter().
  */
 
-/**
- * function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
- * $route = \Drupal::routematch()->getRouteName();
- * print_r($route);
- * exit;
- * }
-*/
+
+  function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $route = \Drupal::routematch()->getRouteName();
+  print_r($route);
+  exit;
+  }
+
 
 /**
   * function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -23,4 +21,14 @@ use Drupal\Core\Form\FormStateInterface;
   *  exit;
   * }
   * }
-*/
+*//**
+ * Implements hook_user_login().
+ */
+function sathyam_prakaash_user_login($account) {
+  // Instantiate our event.
+  $event = new UserLoginEvent($account);
+  $event_dispatcher = \Drupal::service('event_dispatcher'); //triggering the event_dispatcher service and dispatch the event.
+  $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);
+}
+
+
