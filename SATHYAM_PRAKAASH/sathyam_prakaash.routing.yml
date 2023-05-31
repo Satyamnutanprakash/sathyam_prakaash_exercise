@@ -1,21 +1,21 @@
-sathyam_prakaash.controller: #machine name
-  path: '/controller-page' #giving path to SPController.php
+sathyam_prakaash.controller: #route name for controller
+  path: '/controller-page' #giving url to access to SPController
   defaults:
     _controller: '\Drupal\sathyam_prakaash\Controller\SPController::banner'
     _title: 'Controller Page'  #title given for SPController.php
   requirements:
-    _permission: 'access content'  #permission created for controller
+    _permission: 'access content' #permission to access content for all the users
 
-sathyam_prakaash.modified_form: #machine name
-  path: "/modified-form-page"  #giving path to ModifiedForm.php
+sathyam_prakaash.modified_form: #route name for custom form
+  path: "/modified-form-page"  #giving url to access to ModifiedForm
   defaults:
     _form: '\Drupal\sathyam_prakaash\Form\ModifiedForm' #defining the path
     _title: 'Modified Form' #title given for custom form
   requirements:
-    _permission: 'access content' #permission to access published content
+    _permission: 'access content' #permission to access content for all the users
 
-sathyam_prakaash.config_form: #machine name
-  path: '/config-form-page'  #giving path to Configform.php
+sathyam_prakaash.config_form: #route name for config form
+  path: '/config-form-page'  #giving url to access Configform
   defaults:
     _form: '\Drupal\sathyam_prakaash\Form\ConfigForm' #defining the path
     _title: 'Config Form'  #title given for config form
@@ -23,3 +23,11 @@ sathyam_prakaash.config_form: #machine name
     _permission: 'administer site configuration' #created new pemission with admin route enabled
   options:
     _admin_route: TRUE
+
+sathyam_prakaash.dropdown_form: #route name for dropdown form
+  path: '/dropdown' #giving url to access DropdownForm
+  defaults:
+    _form: '\Drupal\sathyam_prakaash\Form\DropdownForm' #defining the path
+    _title: 'Dropdown Form' #title for dropdown form
+  requirements:
+    _permission: 'access content' #permission to access content for all the users
