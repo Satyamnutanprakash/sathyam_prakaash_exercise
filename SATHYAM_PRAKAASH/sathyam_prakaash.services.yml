@@ -18,3 +18,9 @@ services: #creating a service
     arguments: ['@entity_type.manager']
     tags:
       - { name: drush.command } # to use drush command
+
+  sathyam_prakaash.commands2: #creating custom drush command
+    class: \Drupal\sathyam_prakaash\Commands\DrushHelpersCommands2
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: drush.command } # to use drush command
