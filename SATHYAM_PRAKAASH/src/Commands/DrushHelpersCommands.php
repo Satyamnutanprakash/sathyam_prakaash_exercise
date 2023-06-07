@@ -6,13 +6,14 @@ use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
+/**
+ * Command to get editor role active users.
+ */
 class DrushHelpersCommands extends DrushCommands {
 
   /**
-   * @var Drupal\Core\Entity\EntityTypeManagerInterface $entityManager
-   *    Entity manager service.
+   * Using Entity manager service.
    */
-
   public function __construct(EntityTypeManagerInterface $entityTypeManager) {
     $this->entityManager = $entityTypeManager;
     parent::__construct();
@@ -33,7 +34,8 @@ class DrushHelpersCommands extends DrushCommands {
    * @command drush active-users:editor
    * @aliases role-editor
    *
-   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields
+   * @return RowOfFields
+   *   with user id, name and email.
    */
   public function blockedUsers() {
     $users = $this->entityManager->getStorage('user')->loadByProperties(['status' => 1]);

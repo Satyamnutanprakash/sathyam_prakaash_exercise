@@ -6,7 +6,6 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 
-
 /**
  * Define the "super field formatter".
  *
@@ -19,54 +18,50 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
-
-
 class SuperFieldFormatter extends FormatterBase {
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function defaultSettings() {
-        return [
-            'critic' => 'Film criticism ',
-        ] + parent::defaultSettings();
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings() {
+    return [
+      'critic' => 'Film criticism ',
+    ] + parent::defaultSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $form['critic'] = [
+      '#type' => 'textfield',
+      '#title' => 'Film criticism ',
+      '#default_value' => $this->getSetting('critic'),
+    ];
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary() {
+    $summary = [];
+    $summary[] = $this->t("Film criticism : @critic", ["@critic" => $this->getSetting('critic')]);
+    return $summary;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function viewElements(FieldItemListInterface $items, $langcode) {
+    $element = [];
+
+    foreach ($items as $delta => $item) {
+      $element[$delta] = [
+        '#markup' => $this->getSetting('critic') . $item->value,
+      ];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-
-    public function settingsForm(array $form, FormStateInterface $form_state) {
-        $form['critic'] =[
-            '#type' => 'textfield',
-            '#title' => 'Film criticism ',
-            '#default_value' => $this->getSetting('critic'),
-        ];
-        return $form;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function settingsSummary() {
-        $summary = [];
-        $summary[] = $this->t("Film criticism : @critic", ["@critic" => $this->getSetting('critic')]);
-        return $summary;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-
-     public function viewElements(FieldItemListInterface $items, $langcode) {
-        $element = [];
-
-        foreach ( $items as $delta => $item) {
-            $element[$delta] = [
-                '#markup' => $this->getSetting('critic') . $item->value,
-            ];
-        }
-        return $element;
-     }
+    return $element;
+  }
 
 }

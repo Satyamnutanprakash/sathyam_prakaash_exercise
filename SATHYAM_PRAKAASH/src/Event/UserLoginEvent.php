@@ -10,23 +10,24 @@ use Drupal\user\UserInterface;
  */
 class UserLoginEvent extends Event {
 
-const EVENT_NAME = 'custom_events_user_login';
+  const EVENT_NAME = 'custom_events_user_login';
 
-/**
+  /**
    * The user account.
    *
    * @var \Drupal\user\UserInterface
    */
-public $account;
+  public $account;
 
-/**
+  /**
    * Constructs the object.
    *
    * @param \Drupal\user\UserInterface $account
    *   The account of the user logged in.
    */
-public function __construct(UserInterface $account) {
-    $this->account = $account;  //will return the user account
-}
+  public function __construct(UserInterface $account) {
+    // Will return the user account.
+    $this->account = $account;
+  }
 
 }

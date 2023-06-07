@@ -18,55 +18,52 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
-
 class SuperFieldWidget extends WidgetBase {
 
-    /**
-     * {@inheritdoc}
-     */
+  /**
+   * {@inheritdoc}
+   */
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    $value = $items[$delta]->value ?? "";
+    $element = $element + [
+      '#type' => 'textfield',
+      '#suffix' => "<span>" . $this->getFieldSetting("info") . "</span>",
+      '#default_value' => $value,
+      '#attributes' => [
+        'ratings' => $this->getSetting('ratings'),
+      ],
+    ];
+    return ['value' => $element];
+  }
 
-     public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-        $value = isset($items[$delta]->value) ? $items[$delta]->value : "";
-        $element = $element + [
-            '#type' => 'textfield',
-            '#suffix' => "<span>" . $this->getFieldSetting("info") . "</span>",
-            '#default_value' => $value,
-            '#attributes' => [
-                'ratings' => $this->getSetting('ratings'),
-            ],
-        ];
-        return ['value' => $element];
-     }
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings() {
+    return [
+      'ratings' => 'Super Movie',
+    ] + parent::defaultSettings();
+  }
 
-     /**
-      * {@inheritdoc}
-      */
-      public static function defaultSettings() {
-        return [
-            'ratings' => 'Super Movie',
-        ] + parent::defaultSettings();
-      }
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $element['ratings'] = [
+      '#type' => 'textfield',
+      '#title' => 'Ratings',
+      '#default_value' => $this->getSetting('ratings'),
+    ];
+    return $element;
+  }
 
-      /**
-       * {@inheritdoc}
-       */
-      public function settingsForm(array $form, FormStateInterface $form_state) {
-        $element['ratings'] = [
-            '#type' => 'textfield',
-            '#title' => 'Ratings',
-            '#default_value' => $this->getSetting('ratings'),
-        ];
-        return $element;
-      }
-
-      /**
-       * {@inheritdoc}
-       */
-      public function settingsSummary() {
-        $summary = [];
-        $summary[] = $this->t("Ratings : @ratings", array("@ratings" => $this->getSetting("ratings")));
-        return $summary;
-      }
-
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary() {
+    $summary = [];
+    $summary[] = $this->t("Ratings : @ratings", ["@ratings" => $this->getSetting("ratings")]);
+    return $summary;
+  }
 
 }

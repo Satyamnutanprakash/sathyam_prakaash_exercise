@@ -6,11 +6,15 @@ use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
-class DrushHelpersCommands extends DrushCommands {
+/**
+ * Command to get latest 10 article contents.
+ */
+class DrushHelpersCommands2 extends DrushCommands {
 
   /**
-   * @var Drupal\Core\Entity\EntityTypeManagerInterface $entityQuery
-   *    Entity query service.
+   * Using Entity query service.
+   *
+   * @var entityQueryUsingEntityqueryservice
    */
 
   protected $entityQuery;
@@ -32,18 +36,26 @@ class DrushHelpersCommands extends DrushCommands {
    * @command drush:title-article
    * @aliases title-article
    *
-   * @return \Consolidation\OutputFormatters\StructuredData\RowsOfFields
+   * @return RowOfFields
    *   The list of article titles.
    */
   public function getTitleArticle() {
-    $query = $this->entityQuery->getStorage('node')->getQuery(); // Load the Entity Query service.
-    $query->accessCheck(FALSE); // Disable access checks for the query.
-    $entityIds = $query->condition('type', 'article') // Specify the entity type you want to query (e.g., node, user, taxonomy_term).
-                       ->condition('status', 1)  // Add additional conditions if needed.
-                       ->sort('created', 'DESC')
-                       ->range(0, 10)  // Set the range to retrieve only 10 entities.
-                       ->execute(); // Execute the query and get the result.
-    $entities = $this->entityQuery->getStorage('node')->loadMultiple($entityIds); // Load the entities based on the returned IDs.
+    // Load the Entity Query service.
+    $query = $this->entityQuery->getStorage('node')->getQuery();
+    // Disable access checks for the query.
+    $query->accessCheck(FALSE);
+    // Specify the entity type you want to query.
+    // (e.g., node, user, taxonomy_term).
+    $entityIds = $query->condition('type', 'article')
+    // Add additional conditions if needed.
+      ->condition('status', 1)
+      ->sort('created', 'DESC')
+    // Set the range to retrieve only 10 entities.
+      ->range(0, 10)
+    // Execute the query and get the result.
+      ->execute();
+    // Load the entities based on the returned IDs.
+    $entities = $this->entityQuery->getStorage('node')->loadMultiple($entityIds);
 
     $titles = [];
     // Loop through the entities and retrieve their titles.
@@ -54,4 +66,5 @@ class DrushHelpersCommands extends DrushCommands {
 
     return new RowsOfFields($titles);
   }
+
 }

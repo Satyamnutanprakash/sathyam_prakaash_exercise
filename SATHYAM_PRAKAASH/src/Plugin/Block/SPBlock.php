@@ -1,19 +1,23 @@
 <?php
 
-  namespace Drupal\sathyam_prakaash\Plugin\Block;
-  use Drupal\Core\Block\BlockBase;
+namespace Drupal\sathyam_prakaash\Plugin\Block;
 
- /**
-  * Provides simple block for SPBlock.
-  * @Block (
-  * id = "sp_plugin_block",
-  * admin_label = "SP Block"
-  * )
-  */
+use Drupal\Core\Block\BlockBase;
 
+/**
+ * Provides simple block for SPBlock.
+ *
+ * @Block (
+ * id = "sp_plugin_block",
+ * admin_label = "SP Block"
+ * )
+ */
 class SPBlock extends BlockBase {
 
-  public function build() { //rendering function
+  /**
+   * Rendering function.
+   */
+  public function build() {
     // Create a new instance of your form.
     $form = \Drupal::formBuilder()->getForm('\Drupal\sathyam_prakaash\Form\ModifiedForm');
 
