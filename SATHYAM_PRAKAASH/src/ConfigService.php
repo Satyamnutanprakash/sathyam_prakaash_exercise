@@ -4,6 +4,9 @@ namespace Drupal\sathyam_prakaash;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 
+/**
+ * Custom service to get config form name.
+ */
 class ConfigService {
 
   /**

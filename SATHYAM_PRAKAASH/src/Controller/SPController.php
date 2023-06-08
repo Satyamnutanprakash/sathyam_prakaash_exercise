@@ -24,8 +24,11 @@ class SPController extends ControllerBase implements ContainerFactoryPluginInter
    * Constructor for the Controller.
    *
    * @param array $configuration
+   *   The Configuration array.
    * @param string $plugin_id
+   *   The Plugin string.
    * @param mixed $plugin_definition
+   *   The pulgin definition.
    * @param \Drupal\sathyam_prakaash\ConfigService $configService
    *
    *   The custom config service.
