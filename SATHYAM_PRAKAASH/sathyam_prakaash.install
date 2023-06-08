@@ -36,3 +36,18 @@ function sathyam_prakaash_schema() {
     ];
     return $schema;
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function your_module_update_100401() {
+
+    // Update a specific configuration form.
+    $config_name = 'sp_config_form.settings';
+    $config = \Drupal::configFactory()->getEditable($config_name);
+    $config->set('firstname', 'Satyam');
+    $config->save();
+
+    // Return a message for the update status report.
+    return 'Configuration settings updated successfully.';
+  }
