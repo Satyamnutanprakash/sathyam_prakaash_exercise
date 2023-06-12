@@ -15,4 +15,3 @@ sathyam_prakaash.modified_form_page:
   title: 'Modified Form Page'  #menu tab name for custom form page
   weight: 0 #this has to displayed first (1st menu tab)
   base_route: sathyam_prakaash.controller #appears on controller page
-

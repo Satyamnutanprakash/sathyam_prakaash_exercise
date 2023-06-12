@@ -1,40 +1,35 @@
 <?php
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\sathyam_prakaash\Event\UserLoginEvent;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-
 /**
- * implements hook_form_alter().
+ * @file
+ * Contains hook functions.
  */
 
-
-  function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $route = \Drupal::routematch()->getRouteName();
-  print_r($route);
-  exit;
-  }
-
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\sathyam_prakaash\Event\UserLoginEvent;
 
 /**
-  * function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  * if($form_id == "node_page_form" || $form_id == "node_page_edit_form")
-  * { $config_service = \Drupal::service('sathyam_prakaash.config_service');
-  *  $data = $config_service->getConfigFormName();
-  *  print_r($data);
-  *  exit;
-  * }
-  * }
-*//**
+ * Implements hook_form_alter().
+ */
+function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $route = \Drupal::routematch()->getRouteName();
+  // To print data at alter node page form.
+  if ($form_id == "node_page_form" || $form_id == "node_page_edit_form") {
+    $config_service = \Drupal::service('sathyam_prakaash.config_service');
+    $data = $config_service->getConfigFormName();
+    print_r($data);
+    print_r($route);
+    exit;
+  }
+}
+
+/**
  * Implements hook_user_login().
  */
 function sathyam_prakaash_user_login($account) {
   // Instantiate our event.
   $event = new UserLoginEvent($account);
-  $event_dispatcher = \Drupal::service('event_dispatcher'); //triggering the event_dispatcher service and dispatch the event.
+  // Triggering the event_dispatcher service and dispatch the event.
+  $event_dispatcher = \Drupal::service('event_dispatcher');
   $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);
 }
-
-
-
