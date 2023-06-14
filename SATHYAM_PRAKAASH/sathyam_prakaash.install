@@ -2,6 +2,13 @@
 
 /**
  * @file
+ * Using Database class for hook_update.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * @file
  * Implements hook_schema().
  */
 
@@ -55,4 +62,209 @@ function your_module_update_100401() {
   // Return a message for the update status report.
   return 'Configuration settings updated successfully.';
 }
+
 // Update => module reinstallation not required.
+
+/**
+ * Implements hook_update_N().
+ */
+function dropdown_update_100404() {
+  $schema = Database::getConnection()->schema();
+  $country_table_name = 'country';
+  $state_table_name = 'state';
+  $district_table_name = 'district';
+
+  // Create the country table if it doesn't exist.
+  if (!$schema->tableExists($country_table_name)) {
+    $schema->createTable($country_table_name, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'country_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'country_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+    ]);
+  }
+
+  // Create the state table if it doesn't exist.
+  if (!$schema->tableExists($state_table_name)) {
+    $schema->createTable($state_table_name, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'state_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'country_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'state_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+      'foreign keys' => [
+        'country_id' => [
+          'table' => $country_table_name,
+          'columns' => ['country_id'],
+          'references' => ['country_id' => 'country_id'],
+          'on delete' => 'CASCADE',
+        ],
+      ],
+    ]);
+  }
+
+  // Create the district table if it doesn't exist.
+  if (!$schema->tableExists($district_table_name)) {
+    $schema->createTable($district_table_name, [
+      'fields' => [
+        'serial_number' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'district_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'state_id' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'district_name' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['serial_number'],
+      'foreign keys' => [
+        'state_id' => [
+          'table' => $state_table_name,
+          'columns' => ['state_id'],
+          'references' => ['state_id' => 'state_id'],
+          'on delete' => 'CASCADE',
+        ],
+      ],
+    ]);
+  }
+
+  return 'Update 100404 has been applied.';
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function dropdown_update_100405() {
+  $country_values = [
+    ['IN', 'India'],
+    ['US', 'United States'],
+    ['CA', 'Canada'],
+    ['GM', 'Germany'],
+  ];
+
+  foreach ($country_values as $country) {
+    \Drupal::database()->insert('country')
+      ->fields(['country_id', 'country_name'])
+      ->values($country)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 100405 has been applied.';
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function dropdown_update_100406() {
+  $state_values = [
+    ['IN', 'UP', 'Uttar Pradesh'],
+    ['IN', 'GUJ', 'Gujarat'],
+    ['IN', 'TN', 'Tamil Nadu'],
+    ['US', 'CF', 'California'],
+    ['US', 'TS', 'Texas'],
+    ['US', 'FA', 'Florida'],
+    ['CA', 'OT', 'Ontario'],
+    ['CA', 'AB', 'Alberta'],
+    ['CA', 'YK', 'Yukon'],
+    ['GM', 'BV', 'Bavaria'],
+    ['GM', 'SX', 'Saxony'],
+    ['GM', 'HS', 'Hessen'],
+  ];
+
+  foreach ($state_values as $state) {
+    \Drupal::database()->insert('state')
+      ->fields(['country_id', 'state_id', 'state_name'])
+      ->values($state)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 100406 has been applied.';
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function dropdown_update_100407() {
+  $district_values = [
+    ['UP', 'AG', 'Agra'],
+    ['UP', 'KP', 'Kanpur'],
+    ['GUJ', 'AD', 'Ahmedabad'],
+    ['GUJ', 'ST', 'Surat'],
+    ['TN', 'CN', 'Chennai'],
+    ['TN', 'KC', 'Kanchipuram'],
+    ['CF', 'LAC', 'Los Angeles County'],
+    ['CF', 'SFC', 'San Francisco County'],
+    ['TS', 'HC', 'Harris County'],
+    ['TS', 'DC', 'Dallas County'],
+    ['FA', 'BC', 'Bay County'],
+    ['FA', 'MDC', 'Miami-Dade County'],
+    ['OT', 'TO', 'Town of Oakville'],
+    ['OT', 'CM', 'City of Mississauga'],
+    ['AB', 'PC', 'Parkland County'],
+    ['AB', 'CC', 'Clearwater County'],
+    ['YK', 'WL', 'Watson Lake'],
+    ['YK', 'WH', 'Whitehorse'],
+    ['BV', 'MN', 'Munich'],
+    ['BV', 'AG', 'Augsburg'],
+    ['SX', 'LP', 'Leipzig'],
+    ['SX', 'CZ', 'Chemnitz'],
+    ['HS', 'HR', 'Hersfeld-Rotenburg'],
+    ['HS', 'WT', 'Wetteraukreis'],
+  ];
+
+  foreach ($district_values as $district) {
+    \Drupal::database()->insert('district')
+      ->fields(['state_id', 'district_id', 'district_name'])
+      ->values($district)
+      ->execute();
+  }
+
+  // Return a message indicating the completion of the update.
+  return 'Update 100407 has been applied.';
+}

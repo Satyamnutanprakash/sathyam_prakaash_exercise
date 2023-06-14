@@ -4,11 +4,39 @@ namespace Drupal\sathyam_prakaash\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Database\Connection;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Dropdown Form to store configuration values.
+ * Dependent Dropdown Form.
  */
 class DropdownForm extends FormBase {
+
+  /**
+   * Database connection object.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Constructs a DropdownForm object.
+   *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection object.
+   */
+  public function __construct(Connection $database) {
+    $this->database = $database;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('database')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -21,52 +49,56 @@ class DropdownForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $opt = static::country();
-    // Initializing country variable.
-    $country = $form_state->getValue('country') ?: 'none';
-    // Initializing state variable.
-    $state = $form_state->getValue('state') ?: 'none';
 
-    // Country form.
+    $opt = static::getCountry();
+    $country = $form_state->getValue('country');
+
+    // exit;.
+    $state = $form_state->getValue('state');
+    // print_r($state);
     $form['country'] = [
       '#type' => 'select',
       '#title' => 'Country',
       '#options' => $opt,
-      'default_value' => $country,
+      '#empty_option' => '- Select -',
+      '#required' => TRUE,
       '#ajax' => [
-    // Ajax function.
         'callback' => '::dropdownCallback',
-        'wrapper' => 'state-container',
+        'wrapper' => 'state-wrapper',
         'event' => 'change',
       ],
     ];
-    // Country form.
-    $form['countrystates'] = [
+
+    $form['state'] = [
       '#type' => 'select',
       '#title' => 'State',
-      '#options' => static::countryStates($country),
-      '#default_value' => !empty($form_state->getValue('countrystates')) ? $form_state->getValue('countrystates') : '',
-      '#prefix' => '<div id="state-container">',
-      '#suffix' => '</div>',
+      '#options' => static::getStates($country),
+      '#empty_option' => '- Select -',
+      '#required' => TRUE,
       '#ajax' => [
-    // Ajax function.
         'callback' => '::dropdownCallback',
-        'wrapper' => 'district-container',
+        'wrapper' => 'district-wrapper',
         'event' => 'change',
       ],
-    ];
-    $form['statedistricts'] = [
-      '#type' => 'select',
-      '#title' => 'District',
-      '#options' => static::stateDistricts($state),
-      '#default_value' => !empty($form_state->getValue('statedistricts')) ? $form_state->getValue('statedistricts') : '',
-      '#prefix' => '<div id="district-container">',
+      '#prefix' => '<div id="state-wrapper">',
       '#suffix' => '</div>',
     ];
+
+    $form['district'] = [
+      '#type' => 'select',
+      '#title' => 'District',
+      '#options' => static::getDistricts($state),
+      '#empty_option' => '- Select -',
+      '#required' => TRUE,
+      '#prefix' => '<div id="district-wrapper">',
+      '#suffix' => '</div>',
+    ];
+
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => 'Submit',
     ];
+
     return $form;
   }
 
@@ -74,6 +106,7 @@ class DropdownForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Process the form submission.
     $trigger = (string) $form_state->getTriggeringElement()['#value'];
     if ($trigger != 'submit') {
       $form_state->setRebuild();
@@ -81,172 +114,63 @@ class DropdownForm extends FormBase {
   }
 
   /**
-   * Ajax callback function for state dropdown.
+   * Ajax callback to update the state dropdown.
    */
   public function dropdownCallback(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     $triggering_element_name = $triggering_element['#name'];
     if ($triggering_element_name === 'country') {
       // Lists the state for the particular country.
-      return $form['countrystates'];
+      return $form['state'];
     }
     elseif ($triggering_element_name === 'state') {
       // Lists the state for the particular country.
-      return $form['statedistricts'];
+      return $form['district'];
     }
   }
 
   /**
-   * Function to get countries.
+   * Get the country options for the select element.
    */
-  public function country() {
-    return [
-      'none' => '-none-',
-      'India' => 'India',
-      'United States' => 'United States',
-      'Canada' => 'Canada',
-      'Germany' => 'Germany',
-    ];
+  public function getCountry() {
+    $query = $this->database->select('country', 'c');
+    $query->fields('c', ['country_id', 'country_name']);
+    $result = $query->execute()->fetchAll();
+    $options = [];
+    foreach ($result as $row) {
+      $options[$row->country_id] = $row->country_name;
+    }
+    return $options;
   }
 
   /**
-   * Functions to get states.
+   * Get the state options for the select element.
    */
-  public function countryStates($country) {
-    switch ($country) {
-      case 'India':
-        $opt = [
-          'UP' => 'Uttar Pradesh',
-          'GUJ' => 'Gujarat',
-          'TN' => 'Tamil Nadu',
-        ];
-        break;
-
-      case 'United States':
-        $opt = [
-          'CF' => 'California',
-          'TS' => 'Texas',
-          'FA' => 'Florida',
-        ];
-        break;
-
-      case 'Canada':
-        $opt = [
-          'OT' => 'Ontario',
-          'AB' => 'Alberta',
-          'YK' => 'Yukon',
-        ];
-        break;
-
-      case 'Germany':
-        $opt = [
-          'BV' => 'Bavaria',
-          'SX' => 'Saxony',
-          'HS' => 'Hessen',
-        ];
-        break;
-
-      default:
-        $opt = ['none' => '-none-'];
-        break;
+  public function getStates($country) {
+    $query = $this->database->select('state', 's');
+    $query->fields('s', ['state_id', 'state_name']);
+    $query->condition('s.country_id', $country);
+    $result = $query->execute()->fetchAll();
+    $options = [];
+    foreach ($result as $row) {
+      $options[$row->state_id] = $row->state_name;
     }
-    return $opt;
+    return $options;
   }
 
   /**
-   * Functions to get districts.
+   * Get the district options for the select element.
    */
-  public function stateDistricts($state) {
-    switch ($state) {
-      case 'UP':
-        $opt = [
-          'Agra' => 'Agra',
-          'Kanpur' => 'Kanpur',
-        ];
-        break;
-
-      case 'GUJ':
-        $opt = [
-          'Ahmedabad' => 'Ahmedabad',
-          'Surat' => 'Surat',
-        ];
-        break;
-
-      case 'TN':
-        $opt = [
-          'Chennai' => 'Chennai',
-          'Kanchipuram' => 'Kanchipuram',
-        ];
-        break;
-
-      case 'CF':
-        $opt = [
-          'LAC' => 'Los Angeles County',
-          'SFC' => 'San Francisco County',
-        ];
-        break;
-
-      case 'TS':
-        $opt = [
-          'HC' => 'Harris County',
-          'DC' => 'Dallas County',
-        ];
-        break;
-
-      case 'FA':
-        $opt = [
-          'BC' => 'Bay County',
-          'MDC' => 'Miami-Dade County',
-        ];
-        break;
-
-      case 'OT':
-        $opt = [
-          'TO' => 'Town of Oakville',
-          'CM' => 'City of Mississauga',
-        ];
-        break;
-
-      case 'AB':
-        $opt = [
-          'PC' => 'Parkland County',
-          'CC' => ' Clearwater County',
-        ];
-        break;
-
-      case 'YK':
-        $opt = [
-          'WL' => 'Watson Lake',
-          'WH' => 'Whitehorse',
-        ];
-        break;
-
-      case 'BV':
-        $opt = [
-          'MN' => 'Munich ',
-          'AG' => 'Augsburg',
-        ];
-        break;
-
-      case 'SX':
-        $opt = [
-          'LP' => 'Leipzig',
-          'CM' => 'Chemnitz',
-        ];
-        break;
-
-      case 'HS':
-        $opt = [
-          'HR' => 'Hersfeld-Rotenburg',
-          'WT' => 'Wetteraukreis',
-        ];
-        break;
-
-      default:
-        $opt = ['none' => '-none-'];
-        break;
+  public function getDistricts($state) {
+    $query = $this->database->select('district', 'd');
+    $query->fields('d', ['district_id', 'district_name']);
+    $query->condition('d.state_id', $state);
+    $result = $query->execute()->fetchAll();
+    $options = [];
+    foreach ($result as $row) {
+      $options[$row->district_id] = $row->district_name;
     }
-    return $opt;
+    return $options;
   }
 
 }
