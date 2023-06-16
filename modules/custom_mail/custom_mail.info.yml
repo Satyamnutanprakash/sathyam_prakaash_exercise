@@ -1,0 +1,5 @@
+name: Custom Mail module
+description: custom mail module
+type: module
+core_version_requirement: ^9 || ^10
+version: 9.x-1.0
