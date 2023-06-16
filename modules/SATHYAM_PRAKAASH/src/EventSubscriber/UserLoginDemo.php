@@ -4,7 +4,7 @@ namespace Drupal\sathyam_prakaash\EventSubscriber;
 
 // To use the created custom Event.
 use Drupal\sathyam_prakaash\Event\UserLoginEvent;
-
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Messenger\MessengerInterface;

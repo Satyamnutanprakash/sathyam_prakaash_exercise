@@ -40,11 +40,12 @@ class SPController extends ControllerBase {
    */
   public function banner() {
     // Defining the rendering function.
-    $config_form_name = $this->configService->getConfigFormName();
+    $data = $this->configService->getConfigFormName();
     $build = [
     // Using the templte we created here.
       '#theme' => 'sp_template',
-      '#config_form_name' => $config_form_name,
+      '#message' => $data,
+      '#hexcode' => '#FBB117',
     ];
     // Return the render array as a Response object.
     return $build;

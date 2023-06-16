@@ -18,7 +18,7 @@ services: #creating a service
     class: '\Drupal\sathyam_prakaash\EventSubscriber\UserLoginDemo'
     tags:
       - { name: 'event_subscriber' } # to use event subscriber
-    arguments: ['@dateFormatter', '@messenger', '@database']
+    arguments: ['@date.formatter', '@messenger', '@database']
 
   sathyam_prakaash.commands: #creating custom drush command
     class: \Drupal\sathyam_prakaash\Commands\DrushHelpersCommands
