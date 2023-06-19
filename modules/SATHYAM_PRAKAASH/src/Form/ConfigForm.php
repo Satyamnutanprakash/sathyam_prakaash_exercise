@@ -38,7 +38,12 @@ class ConfigForm extends ConfigFormBase {
     $config = $this->config(static::CONFIGNAME);
     $form['firstname'] = [
       '#type' => 'textfield',
-      '#title' => 'First Name',
+      '#title' => '<span>First Name</span>',
+      '#attached' => [
+        'library' => [
+          'sathyam_prakaash/css_lib',
+        ],
+      ],
       '#default_value' => $config->get("firstname"),
     ];
 
