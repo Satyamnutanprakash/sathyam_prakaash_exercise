@@ -88,6 +88,32 @@ function sathyam_prakaash_page_attachments_alter(array &$attachments) {
 }
 
 /**
+ * hook_entity_insert().
+ */
+function sathyam_prakaash_entity_insert(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() !== 'node' || ($entity->getEntityTypeId() === 'node' && $entity->bundle() !== 'page')) {
+    return;
+  }
+  $mailManager = \Drupal::service('plugin.manager.mail');
+
+  $module = 'sathyam_prakaash';
+  $key = 'create_page';
+  $to = \Drupal::currentUser()->getEmail();
+  $params['message'] = $entity->get('body')->value;
+  $params['node_title'] = $entity->label();
+  $langcode = \Drupal::currentUser()->getPreferredLangcode();
+  $send = TRUE;
+
+  $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+  if ($result['result'] !== TRUE) {
+    \Drupal::messenger()->addMessage(t('There was a problem sending your message and it was not sent'), 'error');
+  }
+  else {
+    \Drupal::messenger()->addMessage(t('Your message has been sent.'), 'status');
+  }
+}
+
+/**
  * Implements hook_user_login().
  */
 function sathyam_prakaash_user_login($account) {
