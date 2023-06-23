@@ -12,15 +12,16 @@ use Drupal\sathyam_prakaash\Event\UserLoginEvent;
  * Implements hook_form_alter().
  */
 function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $route = \Drupal::routematch()->getRouteName();
-  // To print data at alter node page form.
-  if ($form_id == "node_page_form" || $form_id == "node_page_edit_form") {
-    $config_service = \Drupal::service('sathyam_prakaash.config_service');
-    $data = $config_service->getConfigFormName();
-    print_r($data);
-    print_r($route);
-    exit;
-  }
+  {if($form_id == "node_page_form" || $form_id == "node_page_edit_form"){
+    //print_r($form['field_genre']);
+    //exit;
+    $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
+    //unset($form['field_genre']);
+    //unset($form['field_genre']['widget']['#options']['Action']);
+    $form['field_genre']['widget']['#title'] = "Movie Genre";
+    $form['field_genre']['widget']['#default_value'] = ["Romance"];
+    $form['field_description']['widget']['#title'] = "Movie Review";
+}
 }
 
 /**
