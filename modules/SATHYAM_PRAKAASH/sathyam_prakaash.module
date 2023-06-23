@@ -11,8 +11,10 @@ use Drupal\sathyam_prakaash\Event\UserLoginEvent;
 /**
  * Implements hook_form_alter().
  */
-function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  {if($form_id == "node_page_form" || $form_id == "node_page_edit_form"){
+function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  { if($form_id == "node_page_form" || $form_id == "node_page_edit_form")
+    {
     //print_r($form['field_genre']);
     //exit;
     $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
@@ -21,7 +23,68 @@ function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $fo
     $form['field_genre']['widget']['#title'] = "Movie Genre";
     $form['field_genre']['widget']['#default_value'] = ["Romance"];
     $form['field_description']['widget']['#title'] = "Movie Review";
+    }
+  }
 }
+
+/**
+ * Implements hook_entity_presave().
+ */
+
+function sathyam_prakaash_taxonomy_presave(EntityInterface $entity) {
+    $entity->set("title", "Taxonomy presaving the values");
+    exit;
+}
+
+/**
+ * implements hook_entity_view_alter().
+ */
+
+function sathyam_prakaash_user_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->getEntityTypeId() == "node") {
+        $build['field_tags']['#title'] = "Subject";
+        unset($build['comment']);
+        $build['markup'] = [
+            '#markup' => "<p>Testing Entity View Alter</p>",
+        ];
+    }
+}
+
+/**
+ * implements hook_entity_view()
+ */
+
+function sathyam_prakaash_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+    // condition entity type = node
+    $session = \Drupal::request()->getSession();
+    $counts = $session->get("sathyam_prakaash.node_view_count", []);
+
+    if (!isset($counts[$entity->id()]))
+    {
+      $counts[$entity->id()] = 1; //first time
+    }
+    else {
+      $counts[$entity->id()]++;
+    }
+
+    $session->set("sathyam_prakaash.node_view_count", $counts);
+    $build['count'] = [
+      '#markup' => "Viewed " . $counts[$entity->id()] . " times",
+      '#cache' => [
+          'max-age' => 0,
+        ],
+    ];
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function sathyam_prakaash_page_attachments_alter(array &$attachments) {
+  // Conditionally remove an asset.
+  if (in_array('sathyam_prakaash/css_lib', $attachments['#attached']['library'])) {
+    $index = array_search('sathyam_prakaash/css_lib', $attachments['#attached']['library']);
+    unset($attachments['#attached']['library'][$index]);
+  }
 }
 
 /**
