@@ -33,3 +33,15 @@ function sathyam_prakaash_user_login($account) {
   $event_dispatcher = \Drupal::service('event_dispatcher');
   $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);
 }
+
+/**
+ * Implements hook_theme().
+ */
+
+function sathyam_prakaash_theme($existing, $type, $theme, $path) {
+  return [
+    'sp_template2' => [
+        'variables' => ['text' => ""],
+    ],
+];
+}

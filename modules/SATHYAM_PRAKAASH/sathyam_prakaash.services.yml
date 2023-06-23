@@ -1,7 +1,11 @@
 services: #creating a service
   sathyam_prakaash.config_service:
-    class: Drupal\sathyam_prakaash\ConfigService
+    class: 'Drupal\sathyam_prakaash\ConfigService'
     arguments: ['@config.factory']
+
+  sathyam_prakaash.modified_form_service:
+    class: '\Drupal\sathyam_prakaash\Form\ModifiedForm'
+    arguments: [ '@messenger', '@database' ]
 
   redirect_events_subscriber: #intialiing the eventsubscriber
     class: '\Drupal\sathyam_prakaash\EventSubscriber\RedirectEventSubscriber'
