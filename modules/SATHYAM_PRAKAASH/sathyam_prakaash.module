@@ -11,21 +11,21 @@ use Drupal\sathyam_prakaash\Event\UserLoginEvent;
 /**
  * Implements hook_form_alter().
  */
-function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id)
-{
-  { if($form_id == "node_page_form" || $form_id == "node_page_edit_form")
-    {
-    //print_r($form['field_genre']);
-    //exit;
-    $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
-    //unset($form['field_genre']);
-    //unset($form['field_genre']['widget']['#options']['Action']);
-    $form['field_genre']['widget']['#title'] = "Movie Genre";
-    $form['field_genre']['widget']['#default_value'] = ["Romance"];
-    $form['field_description']['widget']['#title'] = "Movie Review";
-    }
-  }
-}
+// function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id)
+// {
+//   { if($form_id == "node_page_form" || $form_id == "node_page_edit_form")
+//     {
+//     //print_r($form['field_genre']);
+//     //exit;
+//     $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
+//     //unset($form['field_genre']);
+//     //unset($form['field_genre']['widget']['#options']['Action']);
+//     $form['field_genre']['widget']['#title'] = "Movie Genre";
+//     $form['field_genre']['widget']['#default_value'] = ["Romance"];
+//     $form['field_description']['widget']['#title'] = "Movie Review";
+//     }
+//   }
+// }
 
 /**
  * Implements hook_entity_presave().
@@ -40,78 +40,78 @@ function sathyam_prakaash_taxonomy_presave(EntityInterface $entity) {
  * implements hook_entity_view_alter().
  */
 
-function sathyam_prakaash_user_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if ($entity->getEntityTypeId() == "node") {
-        $build['field_tags']['#title'] = "Subject";
-        unset($build['comment']);
-        $build['markup'] = [
-            '#markup' => "<p>Testing Entity View Alter</p>",
-        ];
-    }
-}
+// function sathyam_prakaash_user_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+//   if ($entity->getEntityTypeId() == "node") {
+//         $build['field_tags']['#title'] = "Subject";
+//         unset($build['comment']);
+//         $build['markup'] = [
+//             '#markup' => "<p>Testing Entity View Alter</p>",
+//         ];
+//     }
+// }
 
 /**
  * implements hook_entity_view()
  */
 
-function sathyam_prakaash_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-    // condition entity type = node
-    $session = \Drupal::request()->getSession();
-    $counts = $session->get("sathyam_prakaash.node_view_count", []);
+// function sathyam_prakaash_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+//     // condition entity type = node
+//     $session = \Drupal::request()->getSession();
+//     $counts = $session->get("sathyam_prakaash.node_view_count", []);
 
-    if (!isset($counts[$entity->id()]))
-    {
-      $counts[$entity->id()] = 1; //first time
-    }
-    else {
-      $counts[$entity->id()]++;
-    }
+//     if (!isset($counts[$entity->id()]))
+//     {
+//       $counts[$entity->id()] = 1; //first time
+//     }
+//     else {
+//       $counts[$entity->id()]++;
+//     }
 
-    $session->set("sathyam_prakaash.node_view_count", $counts);
-    $build['count'] = [
-      '#markup' => "Viewed " . $counts[$entity->id()] . " times",
-      '#cache' => [
-          'max-age' => 0,
-        ],
-    ];
-}
+//     $session->set("sathyam_prakaash.node_view_count", $counts);
+//     $build['count'] = [
+//       '#markup' => "Viewed " . $counts[$entity->id()] . " times",
+//       '#cache' => [
+//           'max-age' => 0,
+//         ],
+//     ];
+// }
 
 /**
  * Implements hook_page_attachments_alter().
  */
-function sathyam_prakaash_page_attachments_alter(array &$attachments) {
-  // Conditionally remove an asset.
-  if (in_array('sathyam_prakaash/css_lib', $attachments['#attached']['library'])) {
-    $index = array_search('sathyam_prakaash/css_lib', $attachments['#attached']['library']);
-    unset($attachments['#attached']['library'][$index]);
-  }
-}
+// function sathyam_prakaash_page_attachments_alter(array &$attachments) {
+//   // Conditionally remove an asset.
+//   if (in_array('sathyam_prakaash/css_lib', $attachments['#attached']['library'])) {
+//     $index = array_search('sathyam_prakaash/css_lib', $attachments['#attached']['library']);
+//     unset($attachments['#attached']['library'][$index]);
+//   }
+// }
 
 /**
  * hook_entity_insert().
  */
-function sathyam_prakaash_entity_insert(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() !== 'node' || ($entity->getEntityTypeId() === 'node' && $entity->bundle() !== 'page')) {
-    return;
-  }
-  $mailManager = \Drupal::service('plugin.manager.mail');
+// function sathyam_prakaash_entity_insert(EntityInterface $entity) {
+//   if ($entity->getEntityTypeId() !== 'node' || ($entity->getEntityTypeId() === 'node' && $entity->bundle() !== 'page')) {
+//     return;
+//   }
+//   $mailManager = \Drupal::service('plugin.manager.mail');
 
-  $module = 'sathyam_prakaash';
-  $key = 'create_page';
-  $to = \Drupal::currentUser()->getEmail();
-  $params['message'] = $entity->get('body')->value;
-  $params['node_title'] = $entity->label();
-  $langcode = \Drupal::currentUser()->getPreferredLangcode();
-  $send = TRUE;
+//   $module = 'sathyam_prakaash';
+//   $key = 'create_page';
+//   $to = \Drupal::currentUser()->getEmail();
+//   $params['message'] = $entity->get('body')->value;
+//   $params['node_title'] = $entity->label();
+//   $langcode = \Drupal::currentUser()->getPreferredLangcode();
+//   $send = TRUE;
 
-  $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
-  if ($result['result'] !== TRUE) {
-    \Drupal::messenger()->addMessage(t('There was a problem sending your message and it was not sent'), 'error');
-  }
-  else {
-    \Drupal::messenger()->addMessage(t('Your message has been sent.'), 'status');
-  }
-}
+//   $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+//   if ($result['result'] !== TRUE) {
+//     \Drupal::messenger()->addMessage(t('There was a problem sending your message and it was not sent'), 'error');
+//   }
+//   else {
+//     \Drupal::messenger()->addMessage(t('Your message has been sent.'), 'status');
+//   }
+// }
 
 /**
  * Implements hook_user_login().

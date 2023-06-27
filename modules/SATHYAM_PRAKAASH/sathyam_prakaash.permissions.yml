@@ -1,3 +1,9 @@
 administer site configuration: #created permission for config form
   title: Config Page Permission #title of the permission
   description: It is a config page #descripton for the permission
+
+Administer Dynamic Node Settings:
+  title: 'Dynamic Node Settings'
+  description: 'Administer Dynamic Node Settings'
+permission_callbacks:
+  - \Drupal\sathyam_prakaash\DNodePermissions::nodeTypePermissions

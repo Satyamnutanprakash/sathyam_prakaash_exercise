@@ -31,3 +31,16 @@ sathyam_prakaash.dropdown_form: #route name for dropdown form
     _title: 'Dropdown Form' #title for dropdown form
   requirements:
     _permission: 'access content' #permission to access content for all the users
+
+sathyam_prakaash.dynamic_title:
+  path: '/node/{node}/title'
+  defaults:
+    _controller: '\Drupal\sathyam_prakaash\Controller\DNodeController::nodeTitle'
+    _title_callback: '\Drupal\sathyam_prakaash\Controller\DNodeController::nodeDTitleLoad'
+  requirements:
+    _custom_access: '\Drupal\sathyam_prakaash\Controller\DNodeAccess::accessNode'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
