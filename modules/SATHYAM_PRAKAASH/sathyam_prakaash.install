@@ -36,6 +36,18 @@ function sathyam_prakaash_schema() {
         'length' => 60,
         'not null' => TRUE,
       ],
+      'mobile' => [
+        'description' => 'User Mobile Number',
+        'type' => 'varchar',
+        'length' => 15,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'description' => 'User email',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+      ],
       'gender' => [
         'description' => 'Gender of the user',
         'type' => 'varchar',
@@ -51,7 +63,7 @@ function sathyam_prakaash_schema() {
 /**
  * Implements hook_update_N().
  */
-function your_module_update_100401() {
+function sathyam_prakaash_update_100401() {
 
   // Update a specific configuration form.
   $config_name = 'sp_config_form.settings';
@@ -68,7 +80,7 @@ function your_module_update_100401() {
 /**
  * Implements hook_update_N().
  */
-function dropdown_update_100404() {
+function sathyam_prakaash_update_100404() {
   $schema = Database::getConnection()->schema();
   $country_table_name = 'country';
   $state_table_name = 'state';
@@ -178,7 +190,7 @@ function dropdown_update_100404() {
 /**
  * Implements hook_update_N().
  */
-function dropdown_update_100405() {
+function sathyam_prakaash_update_100405() {
   $country_values = [
     ['IN', 'India'],
     ['US', 'United States'],
@@ -200,7 +212,7 @@ function dropdown_update_100405() {
 /**
  * Implements hook_update_N().
  */
-function dropdown_update_100406() {
+function sathyam_prakaash_update_100406() {
   $state_values = [
     ['IN', 'UP', 'Uttar Pradesh'],
     ['IN', 'GUJ', 'Gujarat'],
@@ -230,7 +242,7 @@ function dropdown_update_100406() {
 /**
  * Implements hook_update_N().
  */
-function dropdown_update_100407() {
+function sathyam_prakaash_update_100407() {
   $district_values = [
     ['UP', 'AG', 'Agra'],
     ['UP', 'KP', 'Kanpur'],

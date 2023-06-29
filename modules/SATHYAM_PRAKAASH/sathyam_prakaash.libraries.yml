@@ -3,3 +3,5 @@ css_lib: #defined a name for our library
   css:
     theme:
       css/spstyles.css: {} #path where its present
+  js:
+    js/jform.js: {}

@@ -44,3 +44,27 @@ sathyam_prakaash.dynamic_title:
     parameters:
       node:
         type: entity:node
+
+sathyam_prakaash.address_form:  #route name for address form
+  path: "/address-form"  #giving url to access AddressForm
+  defaults:
+    _form: '\Drupal\sathyam_prakaash\Form\AddressForm'  #defining the path
+    _title: "Address"  #title for address form
+  requirements:
+    _permission: "access content"
+
+sathyam_prakaash.token_form:  #route name for token form
+  path: "/token-form"  #giving url to access TokenForm
+  defaults:
+    _form: '\Drupal\sathyam_prakaash\Form\TokenForm'  #defining the path
+    _title: "Token Form"  #title for token form
+  requirements:
+    _permission: "access content"
+
+sathyam_prakaash.modal_page:  #route name for modal page
+  path: "/modal-page"  #giving url to access ModalController
+  defaults:
+    _controller: '\Drupal\sathyam_prakaash\Controller\ModalController::modalLink'  #defining the path
+    _title: 'Modal Page'  #title for modal page
+  requirements:
+    _permission: 'access content'

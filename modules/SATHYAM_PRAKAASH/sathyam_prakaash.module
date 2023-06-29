@@ -135,3 +135,26 @@ function sathyam_prakaash_theme($existing, $type, $theme, $path) {
     ],
 ];
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+
+function sathyam_prakaash_page_attachments_alter(array &$attachments) {
+  $attachments['#attached']['library'][] = 'sathyam_prakaash/css_lib';
+  $attachments['#attached']['drupalSettings']['sathyam_prakaash']['color_body'] = "testing";
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+
+function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == "node_article_edit_form") {
+    $helptext = \Drupal::configFactory()->getEditable("sathyam_prakaash.settings")->get("helptext");
+    $node = \Drupal::routeMatch()->getParameter("node");
+    $token_service = \Drupal::token();
+    $htext = $token_service->replace($helptext, ['node' => $node], ['clear' => TRUE]);
+    $form['#prefix'] = "<span>" . $htext . "</span>";
+  }
+}

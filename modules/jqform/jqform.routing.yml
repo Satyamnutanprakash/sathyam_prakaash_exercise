@@ -1,7 +1,0 @@
-jqform.address_form:  #route name for custom form
-  path: "/jq-form"
-  defaults:
-    _form: '\Drupal\jqform\Form\AddressForm'
-    _title: "Address"
-  requirements:
-    _permission: "access content"

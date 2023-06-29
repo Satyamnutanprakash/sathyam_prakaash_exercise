@@ -1,4 +1,0 @@
-js_lib:  #to add external css or js libraries
-  version: 1.x
-  js:
-    js/jqform.js: {}

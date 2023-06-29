@@ -2,7 +2,7 @@
 
   Drupal.behaviors.MyModuleBehavior = {
       attach: function (context, settings) {
-      var testing = drupalSettings.jqform.testing;
+      var testing = drupalSettings.sathyam_prakaash.testing;
       console.log(testing)
       $('body').css('background', testing);
       }
@@ -10,9 +10,8 @@
 
   $.fn.testing = function() {
   console.log("submitted");
-      $("#custom-demo-get-user-details").submit();
+      $("#modified-form-form-details").submit();
   };
-
 
   $(document).ready(function () {
       var $permanentAdd = $('#same-as-permanent');
@@ -37,5 +36,4 @@
   });
 
 }(jQuery, Drupal, drupalSettings));
-
 
