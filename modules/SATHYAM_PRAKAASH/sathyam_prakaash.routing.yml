@@ -7,7 +7,7 @@ sathyam_prakaash.controller: #route name for controller
     _permission: 'access content' #permission to access content for all the users
 
 sathyam_prakaash.modified_form: #route name for custom form
-  path: "/modified-form-page"  #giving url to access to ModifiedForm
+  path: '/modified-form-page'  #giving url to access to ModifiedForm
   defaults:
     _form: '\Drupal\sathyam_prakaash\Form\ModifiedForm' #defining the path
     _title: 'Modified Form' #title given for custom form
@@ -46,23 +46,23 @@ sathyam_prakaash.dynamic_title:
         type: entity:node
 
 sathyam_prakaash.address_form:  #route name for address form
-  path: "/address-form"  #giving url to access AddressForm
+  path: '/address-form'  #giving url to access AddressForm
   defaults:
     _form: '\Drupal\sathyam_prakaash\Form\AddressForm'  #defining the path
-    _title: "Address"  #title for address form
+    _title: 'Address'  #title for address form
   requirements:
-    _permission: "access content"
+    _permission: 'access content'
 
 sathyam_prakaash.token_form:  #route name for token form
-  path: "/token-form"  #giving url to access TokenForm
+  path: '/token-form'  #giving url to access TokenForm
   defaults:
     _form: '\Drupal\sathyam_prakaash\Form\TokenForm'  #defining the path
-    _title: "Token Form"  #title for token form
+    _title: 'Token Form'  #title for token form
   requirements:
-    _permission: "access content"
+    _permission: 'access content'
 
 sathyam_prakaash.modal_page:  #route name for modal page
-  path: "/modal-page"  #giving url to access ModalController
+  path: '/modal-page'  #giving url to access ModalController
   defaults:
     _controller: '\Drupal\sathyam_prakaash\Controller\ModalController::modalLink'  #defining the path
     _title: 'Modal Page'  #title for modal page
