@@ -17,12 +17,13 @@ use Drupal\sathyam_prakaash\Event\UserLoginEvent;
 //     {
 //     //print_r($form['field_genre']);
 //     //exit;
-//     $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
+//     kint($form['title']['widget']['value']->__toString());
+//     // $form['title']['widget'][0]['value']['#default_value'] = "Movie Name";
 //     //unset($form['field_genre']);
 //     //unset($form['field_genre']['widget']['#options']['Action']);
-//     $form['field_genre']['widget']['#title'] = "Movie Genre";
-//     $form['field_genre']['widget']['#default_value'] = ["Romance"];
-//     $form['field_description']['widget']['#title'] = "Movie Review";
+//     // $form['field_genre']['widget']['#title'] = "Movie Genre";
+//     // $form['field_genre']['widget']['#default_value'] = ["Romance"];
+//     // $form['field_description']['widget']['#title'] = "Movie Review";
 //     }
 //   }
 // }
@@ -158,3 +159,41 @@ function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $fo
     $form['#prefix'] = "<span>" . $htext . "</span>";
   }
 }
+
+  // else if($form_id == "node_page_form" || $form_id == "node_page_edit_form")
+  // {
+  //   kint($form['title']['widget'][0]['value']['#default_value']);
+  // }
+
+  /**
+ * Implements hook_views_pre_Render().
+ */
+// function sathyam_prakaash_views_pre_render(ViewExecutable $view) {
+//   if ($view->id() == "content_view"  && $view->getDisplay()->display['id'] == "page_1") {
+//     $view->element['#attached']['library'][] = "sathyam_prakaash/css_lib";
+//   }
+//   $view->setTitle("title changed");
+// }
+
+/**
+ * Implements hook_views_post_Render().
+ */
+// function sathyam_prakaash_views_post_render(ViewExecutable $view, array &$output, CachePluginBase $cache) {
+//   if ($view->id() == "content_view"  && $view->getDisplay()->display['id'] == "page_1") {
+//     // print_r(gettype($output));exit;
+//     // print_r(array_keys($output));exit;
+//     // print_r(array_keys($output['#rows'][0]['#rows']));exit;
+//     unset($output['#rows'][0]['#rows'][0]);
+//   }
+//   $cache->options['result_lifespan'] = 0;
+//   $cache->options['output_lifespan'] = 0;
+
+// }
+
+/**
+ * Implements hook_node_presave().
+ */
+// function sathyam_prakaash_node_presave($node) {
+//   // print_r($node->getCacheTags());
+//   // print_r($node->getCacheContexts());exit;
+// }
