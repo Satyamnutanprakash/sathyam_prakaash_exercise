@@ -1,0 +1,21 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function sum_node_presave(EntityInterface $entity) {
+  // Check if the entity is of your content type.
+  if ($entity->bundle() === 'sum') {
+    // Get the values of the two visible fields.
+    $field1_value = $entity->get('field_first_number')->value;
+    $field2_value = $entity->get('field_second_number')->value;
+
+    // Calculate the sum of the two fields.
+    $sum = $field1_value + $field2_value;
+
+    // Set the sum value in the new field.
+    $entity->set('field_sum_result', $sum);
+  }
+}

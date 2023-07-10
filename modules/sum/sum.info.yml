@@ -1,0 +1,4 @@
+name: Sum module
+description: Sum module
+type: module
+core_version_requirement: ^9 || ^10
