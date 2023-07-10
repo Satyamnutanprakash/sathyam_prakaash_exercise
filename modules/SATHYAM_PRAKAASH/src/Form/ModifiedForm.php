@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Config Form to store configuration values.
@@ -140,5 +141,7 @@ class ModifiedForm extends FormBase {
       'email' => $form_state->getValue("email"),
       'gender' => $form_state->getValue("gender"),
     ])->execute();
+
+    $form_state->setRedirect('system.admin_content');
   }
 }

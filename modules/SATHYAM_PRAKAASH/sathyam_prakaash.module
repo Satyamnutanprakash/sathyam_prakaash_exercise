@@ -7,6 +7,8 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\sathyam_prakaash\Event\UserLoginEvent;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 
 /**
  * Implements hook_form_alter().
@@ -197,3 +199,29 @@ function sathyam_prakaash_form_alter(&$form, FormStateInterface $form_state, $fo
 //   // print_r($node->getCacheTags());
 //   // print_r($node->getCacheContexts());exit;
 // }
+
+function sathyam_prakaash_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if($view->id() == "shapes_view" && $view->getDisplay()->display['id'] == "page_1")
+  {
+    $user_id = \Drupal::currentUser()->id();
+
+    if ($user_id)
+    {
+      $user_entity = \Drupal::entityTypeManager()->getStorage('user')->load($user_id);
+      $tag = $user_entity->get("field_shapes")->getValue();
+
+      if($tag) {
+        $tag_id = $tag[0]['target_id'];
+        foreach ($query->where as $key => $value) {
+          foreach ($value['conditions'] as $k => $val) {
+            if ($val['field'] == "node__field_shapes.field_shapes_target_id = :node__field_shapes_target_id") {
+              // print_r( $tag_id);
+              // exit;
+              $query->where[$key]['conditions'][$k]['value'][':node__field_shapes_target_id'] = $tag_id;
+            }
+          }
+        }
+      }
+    }
+  }
+}
