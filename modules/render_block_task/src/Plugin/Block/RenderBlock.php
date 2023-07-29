@@ -5,6 +5,7 @@ namespace Drupal\render_block_task\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,17 +16,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   admin_label = @Translation("Render Block Task: Render Block"),
  * )
  */
-class RenderBlock extends BlockBase {
+class RenderBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * CustomNodeInfoController constructor.
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a new RenderBlock instance.
    *
    * @param array $configuration
-   *   A configuration array containing information about the block.
+   *   A configuration array containing information about the plugin instance.
    * @param string $plugin_id
-   *   The plugin ID for the block.
+   *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
-   *   The plugin definition for the block.
+   *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    */
@@ -35,14 +43,7 @@ class RenderBlock extends BlockBase {
   }
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Dependency Injection.
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
@@ -87,9 +88,15 @@ class RenderBlock extends BlockBase {
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
-    $node = $form_state->getValue('node_id');
+    $node_id = $form_state->getValue('node_id');
 
-    $this->configuration['node_id'] = $node ? $node->id() : NULL;
+    // Load the node entity using the provided node ID.
+    if (!empty($node_id)) {
+      $node = $this->entityTypeManager->getStorage('node')->load($node_id);
+      $this->configuration['node_id'] = $node ? $node->id() : NULL;
+    } else {
+      $this->configuration['node_id'] = NULL;
+    }
   }
 
   /**

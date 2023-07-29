@@ -2,3 +2,5 @@ services:
   render_block_task.render_block: #creating custom drush command
     class: \Drupal\render_block_task\Plugin\Block\RenderBlock
     arguments: [ '@entity_type.manager' ]
+    tags:
+      - { name: block.plugin }
