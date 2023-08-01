@@ -1,0 +1,5 @@
+services:
+  custom_details.form:
+    class: Drupal\controller_task\Form\NodeDetailsForm
+    tags:
+      - { name: form_type, priority: 200 }

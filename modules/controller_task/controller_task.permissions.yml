@@ -1,0 +1,4 @@
+administer controller_task configuration:
+  title: 'Administer Content Details Page'
+  description: 'Administer Content Details Page Configuration: Allows users to access the custom details page.'
+  restrict access: true

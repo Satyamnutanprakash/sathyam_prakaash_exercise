@@ -1,0 +1,23 @@
+controller_task.custom_controller:
+  path: '/node/{node}/details'
+  defaults:
+    _title: 'Node Details'
+    _controller: '\Drupal\controller_task\Controller\ControllerTaskController::build'
+  requirements:
+    _permission: 'administer controller_task configuration'
+    _custom_node_access: 'view'
+  options:
+    _node_operation_route: TRUE
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+
+
+controller_task.controller_form:
+  path: '/admin/config/system/controller-task'
+  defaults:
+    _title: 'Node Details Form'
+    _form: 'Drupal\controller_task\Form\NodeDetailsForm'
+  requirements:
+    _permission: 'administer controller_task configuration'
