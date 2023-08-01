@@ -1,0 +1,12 @@
+services:
+  render_block_task.render_block: #creating custom block plugin
+    class: \Drupal\render_block_task\Plugin\Block\RenderBlock
+    arguments: [ '@entity_type.manager' ]
+    tags:
+      - { name: block.plugin }
+
+  render_block_pro_task.render_block_pro: #creating custom block plugin
+    class: \Drupal\render_block_task\Plugin\Block\RenderBlockPro
+    arguments: [ '@entity_type.manager' ]
+    tags:
+      - { name: block.plugin }
