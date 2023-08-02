@@ -4,18 +4,25 @@ namespace Drupal\controller_task\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 /**
  * Configure Custom Controller Task Module settings for this site.
  */
-class NodeDetailsForm extends ConfigFormBase implements ContainerFactoryPluginInterface {
+class NodeDetailsForm extends ConfigFormBase {
+
+  protected $configFactory;
+
+  /**
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $account;
 
   /**
    * The entity type manager.
@@ -25,40 +32,23 @@ class NodeDetailsForm extends ConfigFormBase implements ContainerFactoryPluginIn
   protected $entityTypeManager;
 
   /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
    * Constructs a new RenderBlock instance.
    *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user service.
    */
-public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
+public function __construct( EntityTypeManagerInterface $entity_type_manager, AccountInterface $account) {
+      $this->entityTypeManager = $entity_type_manager;
+      $this->account = $account;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
+  public static function create( ContainerInterface $container ) {
+    return new static (
       $container->get('entity_type.manager'),
       $container->get('current_user')
     );
@@ -88,7 +78,7 @@ public function __construct(array $configuration, $plugin_id, $plugin_definition
 
     // Get the default title from the node.
     $default_title = $node->label();
-    $current_user_id = $this->currentUser->id();
+    $current_user_id = $this->account->id();
     $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
 
     $form['title'] = [
@@ -107,11 +97,6 @@ public function __construct(array $configuration, $plugin_id, $plugin_definition
       '#selection_settings' => ['include_anonymous' => FALSE],
       '#maxlength' => 60,
       '#required' => TRUE,
-    ];
-
-    $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Save'),
     ];
 
     return parent::buildForm($form, $form_state);
